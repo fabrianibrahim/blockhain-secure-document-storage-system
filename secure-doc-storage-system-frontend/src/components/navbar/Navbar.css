@@ -1,0 +1,50 @@
+button[id="connect-btn"]:hover {
+    font-weight: bolder;
+    color: white;
+  }
+  .custom-toggler.navbar-toggler {
+    border-radius: 5px;
+    border-color: #00a3ff;
+  }
+  .custom-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 163, 255, 255)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+  }
+  .navbar-background {
+    background: #0032614d;
+  }
+  .navbar-text-style {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    color: #00a3ff !important;
+    margin-right: 25px;
+  }
+  .nav-link {
+    border-bottom: 5px solid transparent;
+  }
+  
+  .nav-link:hover {
+    border-bottom: 5px solid #00a3ff;
+  }
+  .active {
+    border-bottom: 5px solid #00a3ff;
+  }
+  .navbar-btn-style {
+    background: #00a3ff;
+    box-shadow: 0px 0px 20px rgba(0, 163, 255, 0.25);
+    border-radius: 10px;
+    border-color: #00a3ff;
+  
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+  
+    color: #ffffff;
+  
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+  }
+  

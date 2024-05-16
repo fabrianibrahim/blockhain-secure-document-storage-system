@@ -1,0 +1,56 @@
+.view-container {
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 132, 255, 0.5);
+    border-radius: 10px;
+  }
+  .doc-list-btn {
+    background: none;
+    color: #00a3ff;
+    border: none;
+    font-size: 16px;
+  }
+  .doc-list-btn:hover {
+    color: #ffffff;
+  }
+  
+  .view-btn {
+    background: #ffffff;
+    border-radius: 10px;
+    border-color: #ffffff;
+  
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #00a3ff;
+  }
+  .burn-btn {
+    background: #0085ff;
+    box-shadow: 0px 0px 20px rgba(0, 132, 255, 0.5);
+    border-radius: 10px;
+    border-color: #0085ff;
+  
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #ffffff;
+  }
+  .name-text-style {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+  
+    color: #ffffff;
+  }
+  .desc-text-style {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+  
+    color: #8c8c8c;
+  }
+  
