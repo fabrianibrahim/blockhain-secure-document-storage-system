@@ -87,7 +87,59 @@ const UpdateDocument = ({
 
   // Update button handler
   const updateHandler = async (e) => { 
-    //WRITE YOUR CODE HERE
+    e.preventDefault(); 
+    if (!walletConnected) {
+      alert("connect your wallet");
+      return;
+    }
+    if (!ipfs) {
+      alert("ipfs not connected");
+      return;
+    }
+    if (fileType === "pdf" || fileType === "docx") { 
+      setIsUpdateLoading(true); // Update button loader active 
+      let currentData = new Date().getTime(); 
+      let url = ""; 
+      if (isFilePicked) { 
+        const result = await ipfs.add(docFile); 
+        url = `https://`+SUB_DOMAIN+`.infura-ipfs.io/ipfs/${result.path}`; 
+      } else { 
+        url = document.file; 
+      } 
+      // metadata to update document in smart contract 
+      const metadata = { 
+        name: name, 
+        description: desc, 
+        file: url, 
+        date: currentData, 
+        edition: edition, 
+        attributes: [ 
+          { 
+            trait_type: "File Name", 
+            value: fileName, 
+          }, 
+          { 
+            trait_type: "File Size", 
+            value: fileSize, 
+          }, 
+          { 
+            trait_type: "File Type", 
+            value: fileType, 
+          }, 
+        ], 
+      }; 
+      const added = await ipfs.add(JSON.stringify(metadata)); 
+      const tokenURI = `https://`+SUB_DOMAIN+`.infura-ipfs.io/ipfs/${added.path}`; 
+      // Updating document on blockchain 
+      try { 
+        await secureStorageContract.methods 
+          .updateDocument(edition, tokenURI) 
+          .send({ from: defaultAccount }); 
+          setIsUpdateLoading(false); 
+      } catch { 
+        setIsUpdateLoading(false); 
+      } 
+    } else alert("Select the correct file format!!"); 
   };
 
   return (

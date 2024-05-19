@@ -25,12 +25,34 @@ function App() {
 
   // LOADING BLOCKCHAIN DATA
   const loadBlockchainData = async () => {
-  //  WRITE YOUR CODE HERE
+    window.web3 = new Web3(window.ethereum); 
+    const web3 = window.web3; 
+    const contract = new web3.eth.Contract( 
+      SecureStorage.abi, 
+      SecureStorage.contractAddress 
+    ); 
+    setSecureStorageContract(contract); 
+    setContractDetected(true);
   };
 
   // Function to handle the wallet connection
   const connectWalletHandler = () => {
-  //  WRITE YOUR CODE HERE
+    if (window.ethereum && window.ethereum.isMetaMask) { 
+      console.log("MetaMask Here!"); 
+      window.ethereum 
+        .request({ method: "eth_requestAccounts" }) 
+        .then((result) => { 
+          accountChangedHandler(result[0]); 
+          setWalletConnected(true); 
+        }) 
+        .catch((error) => { 
+          setErrorMessage(error.message); 
+        }); 
+    } else { 
+      console.log("Need to install MetaMask"); 
+      alert("You need to install MetaMask"); 
+      setErrorMessage("Please install MetaMask browser extension to interact"); 
+    } 
   };
 
   // Function to check the account connection

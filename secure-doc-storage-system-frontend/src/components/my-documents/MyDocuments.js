@@ -39,12 +39,75 @@ const MyDocuments = ({
 
   // Getting documents list from smart contract
   const getDocuments = async () => {
-    // WRITE your code here
+    let allDocs = []; 
+    if (window.ethereum && window.ethereum.isMetaMask) { 
+      setIsMetaMaskAvailable(true); 
+      if (window.ethereum.networkVersion == "5") { 
+        setIsNetwork(true); 
+        if (secureStorageContract) { 
+          try { 
+            var currentId = await secureStorageContract.methods 
+              .currentId() 
+              .call(); 
+          } catch {} 
+          for (let i = 1; i <= currentId; i++) { 
+            var isFlag = false; 
+            try { 
+              var myDocsAddress = await secureStorageContract.methods 
+                .ownerOf(i) 
+                .call(); 
+            } catch (err) { 
+              isFlag = true; 
+            } 
+            if (docsOption && !isFlag) { 
+            if (myDocsAddress.toLowerCase() === defaultAccount) { 
+                const uri = await secureStorageContract.methods 
+                  .tokenURI(i) 
+                  .call(); 
+                const doc = await axios.get(uri); 
+                allDocs.push(doc.data); 
+              } 
+            } else if (!isFlag) {
+              const uri = await secureStorageContract.methods 
+                .tokenURI(i) 
+                .call(); 
+              const doc = await axios.get(uri); 
+              allDocs.push(doc.data); 
+            } 
+          } 
+          setDocuments(allDocs); 
+          setIsLoading(false); 
+        } else { 
+          console.log("contract not get"); 
+        } 
+      } else { 
+        setIsLoading(false); 
+        setIsNetwork(false); 
+      } 
+    } else {
+      setIsLoading(false); 
+      setIsMetaMaskAvailable(false); 
+    } 
   };
 
   // Burn button handler
   const burnHandler = async (id) => {
-    // WRITE your code here
+    if (secureStorageContract && docsOption) { 
+      if (walletConnected === true) { 
+        setIsBurnLoading(id); 
+        try { 
+          await secureStorageContract.methods 
+            .burnDocument(id) 
+            .send({ from: defaultAccount }); 
+          setIsBurnLoading(null); 
+          window.location.reload(); 
+        } catch { 
+          setIsBurnLoading(null); 
+        } 
+      } else { 
+        alert("Connect your wallet!!!"); 
+      } 
+    } 
   };
 
   // All documents button

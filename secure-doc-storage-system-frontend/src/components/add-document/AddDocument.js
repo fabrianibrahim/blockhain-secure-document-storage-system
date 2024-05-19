@@ -60,7 +60,72 @@ function handleFileChange(event) {
 
 // Mint button handler
 const mintHandler = async (e) => {
-//  WRITE your code here
+  e.preventDefault(); 
+  if (walletConnected === true) { 
+    if (ipfs) { 
+      console.log("ipfs connected"); 
+      if (name && desc && docFile) { 
+        if (fileType === "pdf" || fileType === "docx") { 
+          setIsMintLoading(true); 
+          let currentData = new Date().getTime(); 
+          // Uploading document to IPFS and getting url 
+          const result = await ipfs.add(docFile); 
+          const url = `https://`+SUB_DOMAIN+`.infura-ipfs.io/ipfs/${result.path}`;  
+          // get current ID and add +1 
+          let currentId = await secureStorageContract.methods 
+            .currentId() 
+            .call(); 
+          currentId = parseInt(currentId) + 1; 
+          // metadata object to upload data on ipfs 
+          const metadata = { 
+            name: name.toUpperCase(), 
+            description: desc, 
+            file: url, 
+            date: currentData, 
+            edition: currentId, 
+            attributes: [ 
+              { 
+                trait_type: "File Name", 
+                value: fileName, 
+              }, 
+              { 
+                trait_type: "File Size", 
+                value: fileSize, 
+              }, 
+              { 
+                trait_type: "File Type", 
+                value: fileType, 
+              }, 
+            ], 
+          }; 
+          // Uploading metadata to IPFS and getting URL 
+          const added = await ipfs.add(JSON.stringify(metadata)); // uploading data on IPFS 
+          const tokenURI = `https://`+SUB_DOMAIN+`.infura-ipfs.io/ipfs/${added.path}`; 
+          // Minting URL we got from IPFS. 
+          try { 
+            await secureStorageContract.methods 
+              .mintDocument(tokenURI) 
+              .send({ from: defaultAccount }); 
+            setIsMintLoading(false); 
+            setName(""); 
+            setDesc(""); 
+            setDocFile(null); 
+            setIsFilePicked(false); 
+          } catch { 
+            setIsMintLoading(false); 
+          } 
+        } else { 
+          alert("Select the correct file format!!"); 
+        } 
+      } else { 
+        alert("input not entered"); 
+      } 
+    } else { 
+      alert("ipfs not connected"); 
+    } 
+  } else { 
+    alert("connect your wallet"); 
+  } 
 };
 
 return (
